@@ -12,7 +12,7 @@
                                    placeholder="Профессия, должность или компания">
                             <transition name="fade">
                                 <div class="autocomplete" v-if="completedForm && Object.values(searchedItems).length > 1" v-click-outside="outside">
-                                    <div @click="searching($event, item.name)" class="search_item" v-for="item in searchedItems.items.slice(0, 7)" :key="item.id">
+                                    <div @click="searching($event, item.name)" class="search_item" v-for="item in searchedItems.items.filter((x) => x.name.toLowerCase()).slice(0, 7)" :key="item.id">
                                         <span>{{item.name}}</span>
                                     </div>
                                 </div>
@@ -70,7 +70,8 @@
                 ],
                 selectedType: 1,
                 completedForm: false,
-                searchText: ''
+                searchText: '',
+                filteredItems: [],
             }
         },
         methods: {
@@ -121,9 +122,9 @@
                 isSearchBoard: state => state.isSearchBoardOpen,
                 searchedItems: state => state.vacancy.searching,
             }),
-        },
-        mounted() {
-            this.$store.commit('setSearchBoardVisibleState', true);
+            mounted() {
+                this.$store.commit('setSearchBoardVisibleState', true);
+            }
         }
     }
 </script>
